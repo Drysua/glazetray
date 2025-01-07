@@ -1,11 +1,10 @@
 package main
 
 import (
+	"embed"
 	"encoding/json"
 	"fmt"
 	"log"
-	"os"
-	"path/filepath"
 	"sync"
 
 	"github.com/getlantern/systray"
@@ -22,6 +21,9 @@ type ServerMessage struct {
 	Success        bool        `json:"success"`
 	SubscriptionId string      `json:"subscriptionId"`
 }
+
+//go:embed icons/*.ico
+var icons embed.FS
 
 var wsConn *websocket.Conn
 var mutex sync.Mutex
@@ -50,9 +52,13 @@ func onExit() {
 }
 
 func loadIcon(name string) {
-	relativePath := fmt.Sprintf("icons/%s.ico", name)
-	iconPath, _ := filepath.Abs(relativePath)
-	icon, err := os.ReadFile(iconPath)
+	// relativePath := fmt.Sprintf("icons/%s.ico", name)
+	// iconPath, _ := filepath.Abs(relativePath)
+	// icon, err := os.ReadFile(iconPath)
+
+	iconPath := fmt.Sprintf("icons/%s.ico", name)
+	// iconPath, _ := filepath.Abs(relativePath)
+	icon, err := icons.ReadFile(iconPath)
 	if err != nil {
 		log.Println("Failed to load icon:", err)
 	}
