@@ -1,4 +1,4 @@
-module glazetray
+module github.com/Drysua/glazetray
 
 go 1.23.4
 
